@@ -1,0 +1,43 @@
+load("//:defs.bzl", "cat", "flag", "flag_cat", "flag_files")
+
+cat(
+    name = "cat",
+    srcs = [],
+    string = "simple",
+    out = "cat.txt",
+)
+
+flag(
+    name = "flag",
+    build_setting_default = "default_flag",
+    visibility = ["//visibility:public"],
+)
+
+flag_cat(
+    name = "flag_cat",
+    srcs = ["cat"],
+    string = "with flag",
+    out = "flag_cat.txt",
+)
+
+flag_files(
+    name = "transition_default",
+    srcs = ["flag_cat"],
+    flag = "default_flag",
+)
+
+flag_files(
+    name = "transition_different",
+    srcs = ["flag_cat"],
+    flag = "different_flag",
+)
+
+cat(
+    name = "combined",
+    srcs = [
+        "transition_default",
+        "transition_different",
+    ],
+    string = "combined",
+    out = "combined.txt",
+)
